@@ -1,0 +1,91 @@
+{
+  //  一个 module 对应打包后的一个 hap(HarmonyOS Ability Package)包
+  "module": {
+    "name": "entry",
+    // hap 名称
+    "type": "entry",
+    // 3个选项：entry、feature、har
+    "description": "$string:module_desc",
+    "mainElement": "EntryAbility",
+    // 当前模块的入口 ability 名称，说明还可以有其他非入口 ability
+    "deviceTypes": [
+      "default",
+      "tablet"
+    ],
+    "deliveryWithInstall": true,
+    // 当前hap 是否在应用安装时，一起安装
+    "installationFree": false,
+    // 当前hap 是否支持和遵循 免安装特性和约束
+    "pages": "$profile:main_pages",
+    "requestPermissions": [
+      {
+        //        获取电话卡网络信息
+        "name": "ohos.permission.GET_NETWORK_INFO"
+      },
+      //      定位 + 大致定位，权限同时拥有，可精确定位
+      {
+        //        定位
+        "name": "ohos.permission.LOCATION"
+      },
+      {
+        //        大致定位
+        "name": "ohos.permission.APPROXIMATELY_LOCATION"
+      },
+      {
+        //  浮动窗口权限, 另外需要 ACL 白名单权限
+        /*
+        解决方案: 向agconnect@huawei.com发送邮件，申请进入ACL白名单
+        */
+        "name": "ohos.permission.SYSTEM_FLOAT_WINDOW"
+      }
+    ],
+    "abilities": [
+      {
+        "name": "EntryAbility",
+        "srcEntry": "./ets/entryability/EntryAbility.ets",
+        // 因为当前是入口ability，所以这是当前模块入口文件
+        "description": "$string:EntryAbility_desc",
+        "icon": "$media:icon",
+        "label": "$string:EntryAbility_label",
+        "launchType": "singleton",
+        // 默认 singleton，还有 specified: 指定key的ability启动；standard: 每次新建实例;multiton: 每次新建前，删除之前的ability实例
+        "startWindowIcon": "$media:startIcon",
+        // 启动页面图标
+        "startWindowBackground": "$color:start_window_background",
+        //        不建议使用属性“visible”:Deprecated since api 9, use exported instead.
+        //        "visible": true,
+        "exported": true,
+        // 是否可被其他 应用 调用
+        //        标识能够接收的意图的action值的集合，取值通常为系统预定义的action值，也允许自定义。
+        //        https://developer.huawei.com/consumer/cn/doc/harmonyos-guides-V2/actions-entities-0000001477980937-V2
+        "skills": [
+          {
+            "entities": [
+              "entity.system.home"
+              // 主屏幕有图标点击入口类别实体
+            ],
+            "actions": [
+              "action.system.home"
+              // 可以从主屏幕图标入口点击，需要配和 "entity.system.home"
+            ]
+          }
+        ]
+      }
+    ],
+    "extensionAbilities": [
+      {
+        "name": "EntryFormAbility",
+        "srcEntry": "./ets/entryformability/EntryFormAbility.ets",
+        "label": "$string:EntryFormAbility_label",
+        "description": "$string:EntryFormAbility_desc",
+        "type": "form",
+        "metadata": [
+          {
+            "name": "ohos.extension.form",
+            "resource": "$profile:form_config"
+          }
+        ]
+      }
+    ]
+  }
+}
